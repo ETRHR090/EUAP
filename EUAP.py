@@ -2,24 +2,8 @@
 import sqlite3
 import os
 DBName = "EUAP.db"
-def EUAP_Change(Value):
-    conn = sqlite3.connect(DBName)
-    c = conn.cursor()
-    c.execute('''UPDATE SETTINGS SET VAL = ? WHERE INFO = "EUAP_Enabled"''', [Value])
-    conn.commit()
-    conn.close()
-def GetFile(File, Location):
-    import os
-    try:
-        os.system("pip install wget")
-        import wget # type: ignore
-        wget.download(File, Location)
-    except:
-        return ConnectionError
 def Add_User(Username, Password):
-    import sqlite3
     import os
-    DBName = "EUAP.db"
     conn = sqlite3.connect(DBName)
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS EUAP
@@ -33,8 +17,6 @@ def Add_User(Username, Password):
        conn.commit()
        conn.close()
 def Get_User_Password(Username):
-    import sqlite3
-    DBName = "EUAP.db"
     conn = sqlite3.connect(DBName)
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS EUAP
@@ -48,8 +30,6 @@ def Get_User_Password(Username):
     else:
         return Password
 def Get_All_Users():
-    import sqlite3
-    DBName = "EUAP.db"
     conn = sqlite3.connect(DBName)
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS EUAP
@@ -59,8 +39,6 @@ def Get_All_Users():
     c.close()
     return AllUsers
 def Change_User_Password(NewPassword, Username):
-    import sqlite3
-    DBName = "EUAP.db"
     conn = sqlite3.connect()
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS EUAP
@@ -69,8 +47,6 @@ def Change_User_Password(NewPassword, Username):
     conn.commit()
     conn.close()
 def Delete_User(Username):
-    import sqlite3
-    DBName = "EUAP.db"
     conn = sqlite3.connect(DBName)
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS EUAP
@@ -78,3 +54,12 @@ def Delete_User(Username):
     c.execute("DELETE FROM EUAP WHERE Username = ?", [Username])
     conn.commit()
     c.close()
+def UserCheck(Username, Password):
+    conn = sqlite3.connect(DBName)
+    c = conn.cursor()
+    c.execute("SELECT * FROM EUAP WHERE Username = ? AND Password = ?", [Username, Password])
+    if c.fetchall() == []:
+        return False
+    else:
+        return True
+    
